@@ -24,33 +24,27 @@
 
 from __future__ import absolute_import
 from __future__ import print_function
+from __future__ import division
 from __future__ import unicode_literals
 
-from pluggy import HookspecMarker
+from pluggy import HookimplMarker
+
+from formattedcode.format import as_template
 
 
-post_scan = HookspecMarker('post_scan')
-scan_proper = HookspecMarker('scan_proper')
-pre_scan = HookspecMarker('pre_scan')
+hookimpl = HookimplMarker('post_scan')
 
-@pre_scan
-def extract_archive():
-    pass
-
-@scan_proper
-def add_cmdline_option(post_scan_plugins):
-    """
-    Return a click.Option instance which will be added to scancode.cli.ScanCommand
-    """
-    pass
-
-@post_scan
-def write_output(format, files_count, version, notice, scanned_files, options, input, output_file, _echo):
-    pass
-
-@post_scan
+@hookimpl
 def add_format():
-    """
-    Return a unique format name and a plugin to act as a callback for that format
-    """
-    pass
+    return (('html',), 'format_html')
+
+@hookimpl
+def write_output(format, files_count, version, notice, scanned_files, options, input, output_file, _echo):
+    for template_chunk in as_template(scanned_files):
+        try:
+            output_file.write(template_chunk)
+        except Exception as e:
+            extra_context = 'ERROR: Failed to write output to HTML for: ' + repr(template_chunk)
+            _echo(extra_context, fg='red')
+            e.args += (extra_context,)
+            raise e

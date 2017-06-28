@@ -24,33 +24,29 @@
 
 from __future__ import absolute_import
 from __future__ import print_function
+from __future__ import division
 from __future__ import unicode_literals
 
-from pluggy import HookspecMarker
+from pluggy import HookimplMarker
+
+from formattedcode.format import as_html_app
+from formattedcode.format import create_html_app_assets
+from formattedcode.format import HtmlAppAssetCopyWarning
+from formattedcode.format import HtmlAppAssetCopyError
 
 
-post_scan = HookspecMarker('post_scan')
-scan_proper = HookspecMarker('scan_proper')
-pre_scan = HookspecMarker('pre_scan')
+hookimpl = HookimplMarker('post_scan')
 
-@pre_scan
-def extract_archive():
-    pass
-
-@scan_proper
-def add_cmdline_option(post_scan_plugins):
-    """
-    Return a click.Option instance which will be added to scancode.cli.ScanCommand
-    """
-    pass
-
-@post_scan
-def write_output(format, files_count, version, notice, scanned_files, options, input, output_file, _echo):
-    pass
-
-@post_scan
+@hookimpl
 def add_format():
-    """
-    Return a unique format name and a plugin to act as a callback for that format
-    """
-    pass
+    return (('html-app',), 'format_html_app')
+
+@hookimpl
+def write_output(format, files_count, version, notice, scanned_files, options, input, output_file, _echo):
+    output_file.write(as_html_app(input, output_file))
+    try:
+        create_html_app_assets(scanned_files, output_file)
+    except HtmlAppAssetCopyWarning:
+        _echo('\nHTML app creation skipped when printing to stdout.', fg='yellow')
+    except HtmlAppAssetCopyError:
+        _echo('\nFailed to create HTML app.', fg='red')
