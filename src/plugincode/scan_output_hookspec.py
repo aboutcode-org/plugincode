@@ -24,30 +24,16 @@
 
 from __future__ import absolute_import
 from __future__ import print_function
-from __future__ import division
 from __future__ import unicode_literals
 
-from collections import OrderedDict
+from pluggy import HookspecMarker
 
-import simplejson as json
-from pluggy import HookimplMarker
 
-hookimpl = HookimplMarker('scan_output')
+scan_output = HookspecMarker('scan_output')
 
-@hookimpl
-def add_format():
-    return (('json', 'json-pp'), 'format_json')
-
-@hookimpl
+@scan_output
 def write_output(format, files_count, version, notice, scanned_files, options, input, output_file, _echo):
-    meta = OrderedDict()
-    meta['scancode_notice'] = notice
-    meta['scancode_version'] = version
-    meta['scancode_options'] = options
-    meta['files_count'] = files_count
-    meta['files'] = scanned_files
-    if format == 'json-pp':
-        output_file.write(unicode(json.dumps(meta, indent=2 * ' ', iterable_as_array=True, encoding='utf-8')))
-    else:
-        output_file.write(unicode(json.dumps(meta, separators=(',', ':'), iterable_as_array=True, encoding='utf-8')))
-    output_file.write('\n')
+    """
+    Save scan results in the format supplied via -f/--format option
+    """
+    pass
