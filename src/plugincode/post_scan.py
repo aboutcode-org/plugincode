@@ -38,11 +38,12 @@ post_scan_impl = HookimplMarker('post_scan')
 
 
 @post_scan_spec
-def process(scanned_files):
+def process(scanners, results):
     """
-    Process the `scanned_files` and return the modified results.
+    Process the scanned files and yield the modified results.
     Parameters:
-     - `scanned_files`: an iterable of scan results for each file
+     - `scanners`: an ordered dict of all possible scans
+     - `results`: an iterable of scan results for each file
     """
     pass
 
