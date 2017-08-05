@@ -38,7 +38,7 @@ post_scan_impl = HookimplMarker('post_scan')
 
 
 @post_scan_spec
-def process(scanners, results, options):
+def process(scanners, results, options, input):
     """
     Process the scanned files and yield the modified results.
     Parameters:
