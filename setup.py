@@ -16,7 +16,7 @@ import sys
 from setuptools import find_packages
 from setuptools import setup
 
-version = '0.0.0'
+version = '0.0.1'
 
 #### Small hack to force using a plain version number if the option
 #### --plain-version is passed to setup.py
@@ -92,14 +92,14 @@ def read(*names, **kwargs):
 
 
 setup(
-    name='',
+    name='plugincode',
     version=get_version(),
     license='Apache-2.0',
-    description='',
+    description='plugincode is a library that provides plugin functionality for ScanCode toolkit.',
     long_description=read('README.rst'),
     author='nexB. Inc. and others',
     author_email='info@aboutcode.org',
-    url='',
+    url='https://github.com/nexB/plugincode',
     packages=find_packages('src'),
     package_dir={'': 'src'},
     py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
@@ -118,7 +118,14 @@ setup(
         'Topic :: Utilities',
     ],
     keywords=[
+        'plugincode',
+        'scancode',
+        'scancode-toolkit',
     ],
     install_requires=[
+        'click',
+        'commoncode',
+        'pluggy',
+        'six',
     ]
 )

@@ -1,3 +1,3 @@
-A Simple Python Project Skeleton
-================================
-Note: configure script requires src/ directory to run correctly.
+plugincode
+==========
+plugincode is a library that provides plugin functionality for ScanCode toolkit.
