@@ -1,0 +1,12 @@
+about_resource: .
+copyright: copyright (c) nexB. Inc. and others
+description: PluginCode is a library that provides plugable functionality with plugins, 
+ including Click plugins. It is used by ScanCode toolkit and related projects 
+keywords: plugins, plugin, scancode-toolkit
+homepage_url: https://github.com/nexB/plugincode
+holder: nexB. Inc. and others
+holder_contact: info@aboutcode.org
+license_expression: apache-2.0
+name: plugincode
+package_url: pkg:pypi/plugincode
+primary_language: Python
