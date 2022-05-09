@@ -23,8 +23,8 @@ from plugincode import PluginManager
 from plugincode import HookimplMarker
 from plugincode import HookspecMarker
 
-stage = 'scan'
-entrypoint = 'scancode_scan'
+stage = "scan"
+entrypoint = "scancode_scan"
 
 scan_spec = HookspecMarker(stage)
 scan_impl = HookimplMarker(stage)
@@ -64,7 +64,7 @@ class ScanPlugin(CodebasePlugin):
         must be serializable to JSON.
 
         All mapping keys must be strings, including for any nested
-        mappings. 
+        mappings.
 
         The first level mapping keys must be valid Python identifiers and MUST
         be declared as "resource_attributes" Resource-level attributes
@@ -75,7 +75,7 @@ class ScanPlugin(CodebasePlugin):
         key under the Reousrce.extra_data mapping.
 
         Values must be JSON-serializable types, such as one of:
-        - None, unicode, int, float or long. 
+        - None, unicode, int, float or long.
         - iterable/list/tuple/generator or dict/mapping preferrably ordered.
 
         This callable (typically a bare function) should carry as little state
@@ -95,8 +95,5 @@ class ScanPlugin(CodebasePlugin):
 
 
 scan_plugins = PluginManager(
-    stage=stage,
-    module_qname=__name__,
-    entrypoint=entrypoint,
-    plugin_base_class=ScanPlugin
+    stage=stage, module_qname=__name__, entrypoint=entrypoint, plugin_base_class=ScanPlugin
 )

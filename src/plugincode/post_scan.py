@@ -23,8 +23,8 @@ from plugincode import PluginManager
 from plugincode import HookimplMarker
 from plugincode import HookspecMarker
 
-stage = 'post_scan'
-entrypoint = 'scancode_post_scan'
+stage = "post_scan"
+entrypoint = "scancode_post_scan"
 
 post_scan_spec = HookspecMarker(project_name=stage)
 post_scan_impl = HookimplMarker(project_name=stage)
@@ -35,12 +35,10 @@ class PostScanPlugin(CodebasePlugin):
     """
     A post-scan plugin base class that all post-scan plugins must extend.
     """
+
     pass
 
 
 post_scan_plugins = PluginManager(
-    stage=stage,
-    module_qname=__name__,
-    entrypoint=entrypoint,
-    plugin_base_class=PostScanPlugin
+    stage=stage, module_qname=__name__, entrypoint=entrypoint, plugin_base_class=PostScanPlugin
 )

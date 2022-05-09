@@ -23,8 +23,8 @@ from plugincode import PluginManager
 from plugincode import HookimplMarker
 from plugincode import HookspecMarker
 
-stage = 'output_filter'
-entrypoint = 'scancode_output_filter'
+stage = "output_filter"
+entrypoint = "scancode_output_filter"
 
 output_filter_spec = HookspecMarker(project_name=stage)
 output_filter_impl = HookimplMarker(project_name=stage)
@@ -39,12 +39,10 @@ class OutputFilterPlugin(CodebasePlugin):
     Filter plugins MUST NOT modify the codebase beyond setting the
     Resource.is_filtered flag on resources.
     """
+
     pass
 
 
 output_filter_plugins = PluginManager(
-    stage=stage,
-    module_qname=__name__,
-    entrypoint=entrypoint,
-    plugin_base_class=OutputFilterPlugin
+    stage=stage, module_qname=__name__, entrypoint=entrypoint, plugin_base_class=OutputFilterPlugin
 )

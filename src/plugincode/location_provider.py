@@ -44,11 +44,11 @@ logger = logging.getLogger(__name__)
 
 
 def logger_debug(*args):
-    return logger.debug(' '.join(isinstance(a, str) and a or repr(a) for a in args))
+    return logger.debug(" ".join(isinstance(a, str) and a or repr(a) for a in args))
 
 
 project_name = __name__
-entrypoint = 'scancode_location_provider'
+entrypoint = "scancode_location_provider"
 
 location_provider_spec = HookspecMarker(project_name=project_name)
 location_provider_impl = HookimplMarker(project_name=project_name)
@@ -120,8 +120,9 @@ class SimplePluginManager(object):
             if not issubclass(plugin_class, self.plugin_base_class):
                 plugin_base_class = self.plugin_base_class
                 raise Exception(
-                    'Invalid plugin: %(name)r: %(plugin_class)r '
-                    'must extend %(plugin_base_class)r.' % locals())
+                    "Invalid plugin: %(name)r: %(plugin_class)r "
+                    "must extend %(plugin_base_class)r." % locals()
+                )
 
             plugin_class.name = name
             plugin_classes.append(plugin_class)
@@ -132,9 +133,7 @@ class SimplePluginManager(object):
 
 
 location_provider_plugins = SimplePluginManager(
-    project_name=project_name,
-    entrypoint=entrypoint,
-    plugin_base_class=LocationProviderPlugin
+    project_name=project_name, entrypoint=entrypoint, plugin_base_class=LocationProviderPlugin
 )
 
 
@@ -161,8 +160,8 @@ def get_location(location_key, _cached_locations={}):
                 if loc_key in _cached_locations:
                     existing = _cached_locations[loc_key]
                     msg = (
-                        'Duplicate location key provided: {loc_key}: '
-                        'new: {location}, existing:{existing}'
+                        "Duplicate location key provided: {loc_key}: "
+                        "new: {location}, existing:{existing}"
                     )
                     msg = msg.format(**locals())
                     raise ProvidedLocationError(msg)
@@ -170,8 +169,8 @@ def get_location(location_key, _cached_locations={}):
                 _cached_locations[loc_key] = location
 
         if unknown_locations:
-            msg = 'Non-existing locations provided:\n:'
-            msg += '\n'.join('key:{}, loc: {}'.format(k, l) for k, l in unknown_locations.items())
+            msg = "Non-existing locations provided:\n:"
+            msg += "\n".join("key:{}, loc: {}".format(k, l) for k, l in unknown_locations.items())
             raise ProvidedLocationError(msg)
 
     return _cached_locations.get(location_key)

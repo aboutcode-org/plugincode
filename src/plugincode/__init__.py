@@ -25,7 +25,6 @@ from click.types import BoolParamType
 from pluggy import HookimplMarker
 from pluggy import HookspecMarker
 from pluggy import PluginManager as PluggyPluginManager
-from six import string_types
 
 from commoncode import cliutils
 
@@ -39,13 +38,13 @@ def logger_debug(*args):
 
 if TRACE:
     import logging
+
     logger = logging.getLogger(__name__)
     logging.basicConfig(stream=sys.stdout)
     logger.setLevel(logging.DEBUG)
 
     def logger_debug(*args):
-        return logger.debug(' '.join(isinstance(a, string_types)
-                                     and a or repr(a) for a in args))
+        return logger.debug(" ".join(isinstance(a, str) and a or repr(a) for a in args))
 
 
 class PlugincodeError(Exception):
@@ -56,6 +55,7 @@ class BasePlugin(object):
     """
     A base class for all ScanCode plugins.
     """
+
     # stage string for this plugin.
     # This is set automatically when a plugin class is loaded in its manager.
     # Subclasses must not set this.
@@ -147,7 +147,7 @@ class BasePlugin(object):
         """
         Return the qualified name of this plugin.
         """
-        return '{cls.stage}:{cls.name}'.format(cls=cls)
+        return "{cls.stage}:{cls.name}".format(cls=cls)
 
     def __repr__(self, *args, **kwargs):
         return self.qname()
@@ -206,7 +206,7 @@ class PluginManager(object):
         for stage, manager in cls.managers.items():
             mgr_setup = manager.setup()
             if not mgr_setup:
-                msg = 'Cannot load plugins for stage: %(stage)s' % locals()
+                msg = "Cannot load plugins for stage: %(stage)s" % locals()
                 raise PlugincodeError(msg)
             mplugin_classes, mplugin_options = mgr_setup
             plugin_classes.extend(mplugin_classes)
@@ -239,20 +239,22 @@ class PluginManager(object):
         for name, plugin_class in self.manager.list_name_plugin():
 
             if not issubclass(plugin_class, self.plugin_base_class):
-                qname = '%(stage)s:%(name)s' % locals()
+                qname = "%(stage)s:%(name)s" % locals()
                 plugin_base_class = self.plugin_base_class
                 raise PlugincodeError(
-                    'Invalid plugin: %(qname)r: %(plugin_class)r '
-                    'must extend %(plugin_base_class)r.' % locals())
+                    "Invalid plugin: %(qname)r: %(plugin_class)r "
+                    "must extend %(plugin_base_class)r." % locals()
+                )
 
             for option in plugin_class.options:
                 if not isinstance(option, cliutils.PluggableCommandLineOption):
-                    qname = '%(stage)s:%(name)s' % locals()
+                    qname = "%(stage)s:%(name)s" % locals()
                     oname = option.name
                     clin = cliutils.PluggableCommandLineOption
                     raise PlugincodeError(
-                        'Invalid plugin: %(qname)r: option %(oname)r '
-                        'must extend %(clin)r.' % locals())
+                        "Invalid plugin: %(qname)r: option %(oname)r "
+                        "must extend %(clin)r." % locals()
+                    )
                 plugin_options.append(option)
 
             plugin_class.stage = stage
