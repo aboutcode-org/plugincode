@@ -7,22 +7,13 @@
 # See https://aboutcode.org for more information about nexB OSS projects.
 #
 
-import subprocess
 import unittest
-import configparser
+import subprocess
 
 
 class BaseTests(unittest.TestCase):
     def test_skeleton_codestyle(self):
-        """
-        This test shouldn't run in proliferated repositories.
-        """
-        setup_cfg = configparser.ConfigParser()
-        setup_cfg.read("setup.cfg")
-        if setup_cfg["metadata"]["name"] != "skeleton":
-            return
-
-        args = "venv/bin/black --check -l 100 setup.py etc tests"
+        args = "venv/bin/black --check -l 100 setup.py etc tests src"
         try:
             subprocess.check_output(args.split())
         except subprocess.CalledProcessError as e:
@@ -31,6 +22,6 @@ class BaseTests(unittest.TestCase):
             print("===========================================================")
             raise Exception(
                 "Black style check failed; please format the code using:\n"
-                "  python -m black -l 100 setup.py etc tests",
+                "  python -m black -l 100 setup.py etc tests src",
                 e.output,
             ) from e
