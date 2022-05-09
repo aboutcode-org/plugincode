@@ -44,10 +44,11 @@ if TRACE or TRACE_DEEP:
     logger.setLevel(logging.DEBUG)
 
     def logger_debug(*args):
-        return logger.debug(' '.join(isinstance(a, str) and a or repr(a) for a in args))
+        return logger.debug(" ".join(isinstance(a, str) and a or repr(a) for a in args))
 
-stage = 'output'
-entrypoint = 'scancode_output'
+
+stage = "output"
+entrypoint = "scancode_output"
 
 output_spec = HookspecMarker(project_name=stage)
 output_impl = HookimplMarker(project_name=stage)
@@ -76,18 +77,15 @@ class OutputPlugin(CodebasePlugin):
         """
         # FIXME: serialization SHOULD NOT be needed: only some format need it
         # (e.g. JSON) and only these should serialize
-        timing = kwargs.get('timing', False)
-        info = bool(kwargs.get('info') or getattr(codebase, 'with_info', False))
+        timing = kwargs.get("timing", False)
+        info = bool(kwargs.get("info") or getattr(codebase, "with_info", False))
         serializer = functools.partial(Resource.to_dict, with_info=info, with_timing=timing)
 
-        strip_root = kwargs.get('strip_root', False)
+        strip_root = kwargs.get("strip_root", False)
         resources = codebase.walk_filtered(topdown=True, skip_root=strip_root)
         return map(serializer, resources)
 
 
 output_plugins = PluginManager(
-    stage=stage,
-    module_qname=__name__,
-    entrypoint=entrypoint,
-    plugin_base_class=OutputPlugin
+    stage=stage, module_qname=__name__, entrypoint=entrypoint, plugin_base_class=OutputPlugin
 )

@@ -24,8 +24,8 @@ from plugincode import HookimplMarker
 from plugincode import HookspecMarker
 
 
-stage = 'pre_scan'
-entrypoint = 'scancode_pre_scan'
+stage = "pre_scan"
+entrypoint = "scancode_pre_scan"
 
 pre_scan_spec = HookspecMarker(stage)
 pre_scan_impl = HookimplMarker(stage)
@@ -36,12 +36,10 @@ class PreScanPlugin(CodebasePlugin):
     """
     A pre-scan plugin base class that all pre-scan plugins must extend.
     """
+
     pass
 
 
 pre_scan_plugins = PluginManager(
-    stage=stage,
-    module_qname=__name__,
-    entrypoint=entrypoint,
-    plugin_base_class=PreScanPlugin
+    stage=stage, module_qname=__name__, entrypoint=entrypoint, plugin_base_class=PreScanPlugin
 )
