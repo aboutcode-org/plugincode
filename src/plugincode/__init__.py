@@ -25,7 +25,6 @@ from click.types import BoolParamType
 from pluggy import HookimplMarker
 from pluggy import HookspecMarker
 from pluggy import PluginManager as PluggyPluginManager
-from six import string_types
 
 from commoncode import cliutils
 
@@ -44,8 +43,7 @@ if TRACE:
     logger.setLevel(logging.DEBUG)
 
     def logger_debug(*args):
-        return logger.debug(' '.join(isinstance(a, string_types)
-                                     and a or repr(a) for a in args))
+        return logger.debug(' '.join(isinstance(a, str) and a or repr(a) for a in args))
 
 
 class PlugincodeError(Exception):
