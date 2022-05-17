@@ -34,6 +34,7 @@ if TRACE or TRACE_DEEP:
     def logger_debug(*args):
         return logger.debug(" ".join(isinstance(a, str) and a or repr(a) for a in args))
 
+
 stage = "output"
 entrypoint = "scancode_output"
 
