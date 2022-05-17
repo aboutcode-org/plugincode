@@ -2,6 +2,14 @@ Release notes
 =============
 
 
+v31.0.0
+--------
+
+- Adop new commoncode Codebase and Resource
+- Use latest skeleton
+- Bump dependencies
+
+
 v30.0.0
 --------
 
