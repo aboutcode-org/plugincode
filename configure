@@ -59,7 +59,6 @@ if [ -d "$CFG_ROOT_DIR/thirdparty" ]; then
     PIP_EXTRA_ARGS="--find-links $CFG_ROOT_DIR/thirdparty"
 fi
 
-
 ################################
 # Set the quiet flag to empty if not defined
 if [[ "$CFG_QUIET" == "" ]]; then
