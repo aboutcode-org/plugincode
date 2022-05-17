@@ -34,7 +34,6 @@ if TRACE or TRACE_DEEP:
     def logger_debug(*args):
         return logger.debug(" ".join(isinstance(a, str) and a or repr(a) for a in args))
 
-
 stage = "output"
 entrypoint = "scancode_output"
 
@@ -65,11 +64,24 @@ class OutputPlugin(CodebasePlugin):
         """
         # FIXME: serialization SHOULD NOT be needed: only some format need it
         # (e.g. JSON) and only these should serialize
-        timing = kwargs.get("timing", False)
-        info = bool(kwargs.get("info") or getattr(codebase, "with_info", False))
-        serializer = functools.partial(Resource.to_dict, with_info=info, with_timing=timing)
+        with_timing = kwargs.get("timing", False)
+        with_info = bool(kwargs.get("info") or getattr(codebase, "with_info", False))
 
-        strip_root = kwargs.get("strip_root", False)
+        full_root = kwargs.get("full_root", False)
+
+        if codebase.has_single_resource:
+            strip_root = False
+        else:
+            strip_root = kwargs.get("strip_root", False)
+
+        serializer = functools.partial(
+            Resource.to_dict,
+            with_info=with_info,
+            with_timing=with_timing,
+            full_root=full_root,
+            strip_root=strip_root,
+        )
+
         resources = codebase.walk_filtered(topdown=True, skip_root=strip_root)
         return map(serializer, resources)
 
