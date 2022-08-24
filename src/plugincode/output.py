@@ -1,22 +1,10 @@
 #
-# Copyright (c) nexB Inc. and others.
+# Copyright (c) nexB Inc. and others. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
-#
-# Visit https://aboutcode.org and https://github.com/nexB/ for support and download.
-# ScanCode is a trademark of nexB Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
+# See http://www.apache.org/licenses/LICENSE-2.0 for the license text.
+# See https://github.com/nexB/plugincode for support or download.
+# See https://aboutcode.org for more information about nexB OSS projects.
+
 import functools
 
 from commoncode.resource import Resource
@@ -77,11 +65,24 @@ class OutputPlugin(CodebasePlugin):
         """
         # FIXME: serialization SHOULD NOT be needed: only some format need it
         # (e.g. JSON) and only these should serialize
-        timing = kwargs.get("timing", False)
-        info = bool(kwargs.get("info") or getattr(codebase, "with_info", False))
-        serializer = functools.partial(Resource.to_dict, with_info=info, with_timing=timing)
+        with_timing = kwargs.get("timing", False)
+        with_info = bool(kwargs.get("info") or getattr(codebase, "with_info", False))
 
-        strip_root = kwargs.get("strip_root", False)
+        full_root = kwargs.get("full_root", False)
+
+        if codebase.has_single_resource:
+            strip_root = False
+        else:
+            strip_root = kwargs.get("strip_root", False)
+
+        serializer = functools.partial(
+            Resource.to_dict,
+            with_info=with_info,
+            with_timing=with_timing,
+            full_root=full_root,
+            strip_root=strip_root,
+        )
+
         resources = codebase.walk_filtered(topdown=True, skip_root=strip_root)
         return map(serializer, resources)
 
