@@ -67,6 +67,7 @@ if [[ "$(echo $THIRDPARDIR/*.whl)x" != "$THIRDPARDIR/*.whlx" ]]; then
     PIP_EXTRA_ARGS="$NO_INDEX --find-links $THIRDPARDIR"
 fi
 
+
 ################################
 # Set the quiet flag to empty if not defined
 if [[ "$CFG_QUIET" == "" ]]; then
