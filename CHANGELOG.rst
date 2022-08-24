@@ -2,8 +2,8 @@ Changelog
 =============
 
 
-v31.0.0
---------
+v31.0.0 - 2022-08-24
+------------------------
 
 - Adopt new commoncode Codebase and Resource
 - Use latest skeleton
