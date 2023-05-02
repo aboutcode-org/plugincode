@@ -94,11 +94,14 @@ class BasePlugin(object):
     required_resource_attributes = []
 
     # A relative sort order number (integer or float).
-    # This is used to compute the order in which a plugin runs before
-    # another plugin in a given stage
-    # This is also used in scan results, results from scanners are sorted by
+    # This is used in scan results, results from scanners are sorted by
     # this sort_order then by plugin "name".
     sort_order = 100
+
+    # A relative run order number (integer or float).
+    # This is used to compute the order in which a plugin runs before
+    # another plugin in a given stage
+    run_order = 100
 
     # flag set to True once this plugin class has been initialized by calling it
     # setup() class method.

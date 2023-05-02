@@ -1,6 +1,13 @@
 Changelog
 =============
 
+v32.0.0 - 2023-0X-XX
+------------------------
+
+- Add ``run_order`` field to ``BasePlugin``
+  This is used to compute the order in which a plugin runs before another plugin
+  in a given stage.
+
 
 v31.0.0 - 2022-08-24
 ------------------------
@@ -21,7 +28,7 @@ v30.0.0
 - Bump dependencies
 
 
-v21.1.21 
+v21.1.21
 ---------
 
 *2021-01-21*
