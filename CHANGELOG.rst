@@ -1,7 +1,7 @@
 Changelog
 =============
 
-v32.0.0 - 2023-0X-XX
+v32.0.0 - 2023-05-02
 ------------------------
 
 - Add ``run_order`` field to ``BasePlugin``
