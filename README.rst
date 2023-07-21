@@ -8,7 +8,7 @@ PluginCode
 - keywords: plugins, utilities, scancode-toolkit, plugincode
 
 
-PluginCode is a library that provides plugable functionality with plugins, 
+PluginCode is a library that provides plugable functionality with plugins,
 including Click plugins.
 It is used by ScanCode toolkit and related projects
 
