@@ -2,7 +2,7 @@
 # Copyright (c) nexB Inc. and others. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 # See http://www.apache.org/licenses/LICENSE-2.0 for the license text.
-# See https://github.com/nexB/plugincode for support or download.
+# See https://github.com/aboutcode-org/plugincode for support or download.
 # See https://aboutcode.org for more information about nexB OSS projects.
 
 import logging
@@ -157,7 +157,8 @@ def get_location(location_key, _cached_locations={}):
 
         if unknown_locations:
             msg = "Non-existing locations provided:\n:"
-            msg += "\n".join("key:{}, loc: {}".format(k, l) for k, l in unknown_locations.items())
+            msg += "\n".join("key:{}, loc: {}".format(k, l)
+                             for k, l in unknown_locations.items())
             raise ProvidedLocationError(msg)
 
     return _cached_locations.get(location_key)
