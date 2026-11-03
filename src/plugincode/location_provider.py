@@ -7,9 +7,8 @@
 
 import logging
 import os
-import sys
 
-from pluggy import PluginManager as PluggyPluginManager
+from plugincode import _load_entry_points
 
 from plugincode import HookimplMarker
 from plugincode import HookspecMarker
@@ -75,10 +74,8 @@ class SimplePluginManager(object):
         name `module_qname` with plugins loaded from the setuptools `entrypoint`
         that must subclass `plugin_base_class`.
         """
-        self.manager = PluggyPluginManager(project_name=project_name)
         self.entrypoint = entrypoint
         self.plugin_base_class = plugin_base_class
-        self.manager.add_hookspecs(sys.modules[project_name])
 
         # set to True once this manager is initialized by running its setup()
         self.initialized = False
@@ -99,11 +96,8 @@ class SimplePluginManager(object):
         if self.initialized:
             return self.plugin_classes.values()
 
-        entrypoint = self.entrypoint
-        self.manager.load_setuptools_entrypoints(entrypoint)
-
         plugin_classes = []
-        for name, plugin_class in self.manager.list_name_plugin():
+        for name, plugin_class in _load_entry_points(self.entrypoint):
             if not issubclass(plugin_class, self.plugin_base_class):
                 plugin_base_class = self.plugin_base_class
                 raise Exception(
@@ -157,8 +151,9 @@ def get_location(location_key, _cached_locations={}):
 
         if unknown_locations:
             msg = "Non-existing locations provided:\n:"
-            msg += "\n".join("key:{}, loc: {}".format(k, l)
-                             for k, l in unknown_locations.items())
+            msg += "\n".join(
+                f"key:{key}, loc: {location}" for key, location in unknown_locations.items()
+            )
             raise ProvidedLocationError(msg)
 
     return _cached_locations.get(location_key)

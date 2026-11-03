@@ -11,9 +11,11 @@ import sys
 
 import click
 from click.types import BoolParamType
-from pluggy import HookimplMarker
-from pluggy import HookspecMarker
-from pluggy import PluginManager as PluggyPluginManager
+
+if sys.version_info >= (3, 10):
+    from importlib.metadata import entry_points
+else:
+    from importlib_metadata import entry_points
 
 from commoncode import cliutils
 
@@ -34,6 +36,32 @@ if TRACE:
 
     def logger_debug(*args):
         return logger.debug(" ".join(isinstance(a, str) and a or repr(a) for a in args))
+
+
+class HookspecMarker:
+    """Compatibility decorator for plugin authors; plugins are called directly."""
+
+    def __init__(self, project_name):
+        self.project_name = project_name
+
+    def __call__(self, function=None, **kwargs):
+        if function is None:
+            return self
+        return function
+
+
+class HookimplMarker(HookspecMarker):
+    """Compatibility decorator for existing plugin implementations."""
+
+
+def _load_entry_points(group):
+    """Yield (name, plugin) pairs, loading only the first entry for each name."""
+    seen = set()
+    for entry in entry_points(group=group):
+        if entry.name in seen:
+            continue
+        seen.add(entry.name)
+        yield entry.name, entry.load()
 
 
 class PlugincodeError(Exception):
@@ -173,13 +201,11 @@ class PluginManager(object):
         qualified Python module name `module_qname` with plugins loaded from the
         setuptools `entrypoint` that must subclass `plugin_base_class`.
         """
-        self.manager = PluggyPluginManager(project_name=stage)
         self.managers[stage] = self
 
         self.stage = stage
         self.entrypoint = entrypoint
         self.plugin_base_class = plugin_base_class
-        self.manager.add_hookspecs(sys.modules[module_qname])
 
         # set to True once this manager is initialized by running its setup()
         self.initialized = False
@@ -218,17 +244,11 @@ class PluginManager(object):
         if self.initialized:
             return
 
-        entrypoint = self.entrypoint
-        try:
-            self.manager.load_setuptools_entrypoints(entrypoint)
-        except ImportError as e:
-            raise e
         stage = self.stage
 
         plugin_options = []
         plugin_classes = []
-        required_plugins = set()
-        for name, plugin_class in self.manager.list_name_plugin():
+        for name, plugin_class in _load_entry_points(self.entrypoint):
 
             if not issubclass(plugin_class, self.plugin_base_class):
                 qname = "%(stage)s:%(name)s" % locals()
@@ -254,7 +274,6 @@ class PluginManager(object):
 
             plugin_classes.append(plugin_class)
 
-        self.plugin_classes = sorted(
-            plugin_classes, key=lambda c: (c.sort_order, c.name))
+        self.plugin_classes = sorted(plugin_classes, key=lambda c: (c.sort_order, c.name))
         self.initialized = True
         return self.plugin_classes, plugin_options
