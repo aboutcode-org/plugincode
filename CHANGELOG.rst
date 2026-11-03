@@ -1,6 +1,13 @@
 Changelog
 =============
 
+Next release
+------------
+
+- Replace pluggy with entry-point loading in stage and native-location plugin managers.
+  Preserve legacy marker imports, plugin ordering and the first plugin for each name.
+  https://github.com/aboutcode-org/plugincode/issues/14
+
 v32.0.0 - 2023-05-02
 ------------------------
 
